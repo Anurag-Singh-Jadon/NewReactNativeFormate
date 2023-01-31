@@ -15,7 +15,8 @@ import {
   TextInput,
   View,
  ScrollView,
- TouchableOpacity
+ TouchableOpacity,
+ Image
 } from 'react-native';
 
 function App(): JSX.Element {
@@ -44,6 +45,7 @@ function App(): JSX.Element {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
+        <Image source={require('./src/assets/Images/love.gif')} style={{width:100,height:100}}/>
         <Pressable  onPress={ onAdd }>
          <Text style={{color:'red'}}>Add +</Text>
         </Pressable>
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     height: 42,
     paddingHorizontal: 140,
     marginTop: 10,
-    bordereRadius: 12,
+    borderRadius: 12,
   },
   DoneStyle:{
     backgroundColor:'green',
