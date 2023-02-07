@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useState,useEffect, useCallback} from 'react';
 
 import {
   Pressable,
@@ -19,9 +19,11 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 function App(): JSX.Element {
   const [myTextInput, setMyTextInput] = useState([{text: '',isRequired: false}]);
+
 
   const onAdd = () => {
     let cloneArray = [...myTextInput];
@@ -29,17 +31,21 @@ function App(): JSX.Element {
     setMyTextInput(cloneArray);
   };
 
-  const onDelete = (index: number) => {
-    let cloneArray = [...myTextInput];
-    let filterArray = cloneArray.filter((val, i) => {
-      if (i !== index) {
-        return val;
-      }
-    });
-    setMyTextInput(filterArray);
-  };
+ const onDelete = useCallback((index: number)=>{
+  let cloneArray = [...myTextInput];
+  let filterArray = cloneArray.filter((val, i) => {
+    if (i !== index) {
+      return val;
+    }
+  });
+  setMyTextInput(filterArray);
+ },[myTextInput])
 
-  const onChangeText = (text: string, index: number) => {
+ 
+  
+  const onChangeText = useCallback((text: string, index: number)=>{
+
+    
     let updateInputs = myTextInput.map((item, i) => {
       if (index == i) {
         return {...item, text: text};
@@ -47,9 +53,10 @@ function App(): JSX.Element {
       return item;
     });
     setMyTextInput(updateInputs);
-  };
-
-  const onDone = () => {
+   
+  },[myTextInput])
+  
+  const onDone = useCallback(()=>{
     let hitApi = true
     let cloneArray = [...myTextInput]
     let checkEmptyValue =  cloneArray.map((val,i)=>{
@@ -65,7 +72,8 @@ function App(): JSX.Element {
     if(hitApi){
      alert("api hit")
     }
-  };
+  },[myTextInput])
+ 
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -77,7 +85,7 @@ function App(): JSX.Element {
         <Pressable onPress={onAdd}>
           <Text style={{color: 'red'}}>Add +</Text>
         </Pressable>
-        <ScrollView>
+        <KeyboardAwareScrollView>
           {myTextInput.map((val, i) => {
             return (
               <View style={styles.boxView}>
@@ -103,7 +111,7 @@ function App(): JSX.Element {
               </View>
             );
           })}
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         <TouchableOpacity style={styles.DoneStyle} onPress={onDone}>
           <Text>DONE</Text>
